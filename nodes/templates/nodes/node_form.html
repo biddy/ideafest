@@ -1,0 +1,13 @@
+{% extends "layouts/base.html" %}
+
+{% block page_title %} All Ideas | {% endblock %}
+
+{% block page_content %}
+
+<form method='post' action=''>
+{% csrf_token %}
+  {{ form.as_p }}
+<input type='submit' value='Add'>
+</form>
+
+{% endblock %}
