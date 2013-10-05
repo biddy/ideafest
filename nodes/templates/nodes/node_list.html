@@ -1,16 +1,17 @@
 {% extends "layouts/base.html" %}
 
-{% block page_title %} Detail | {% endblock %}
+{% block page_title %} List | {% endblock %}
 
 {% block page_content %}
-<h2>Single Idea</h2>
-<h3>{{ node.title }}</h3>
-<p>{{ node.content }}</p>
+
+<h2>{{ titletitle }}</h2>
+
 <ul>
-  {% for idea in node_detail %}
-  <li>{{ idea.content }}</li>
+  {% for idea in sortedinherit %}
+  <li>id: {{ idea.pk }} parent id: {{ idea.inherit }} : {{ idea.content }}
+    <a href="{% url 'ideas:nodecreate' pk=idea.pk %}">Create Child</a></li>
   {% empty %}
-  <li>sorry no content</li>
+  <li><a href="{% url 'ideas:nodecreate' pk=0 %}">Create First Idea</a></li>
   {% endfor %}
 </ul>
 

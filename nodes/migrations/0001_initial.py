@@ -8,6 +8,17 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        # Adding model 'Title'
+        db.create_table(u'nodes_title', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('created', self.gf('model_utils.fields.AutoCreatedField')(default=datetime.datetime.now)),
+            ('modified', self.gf('model_utils.fields.AutoLastModifiedField')(default=datetime.datetime.now)),
+            ('title', self.gf('django.db.models.fields.CharField')(max_length=255)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(related_name='titles', to=orm['auth.User'])),
+            ('slug', self.gf('django.db.models.fields.SlugField')(default='', max_length=255, blank=True)),
+        ))
+        db.send_create_signal(u'nodes', ['Title'])
+
         # Adding model 'Node'
         db.create_table(u'nodes_node', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -17,11 +28,16 @@ class Migration(SchemaMigration):
             ('inherit', self.gf('django.db.models.fields.IntegerField')()),
             ('content', self.gf('django.db.models.fields.TextField')()),
             ('status', self.gf('model_utils.fields.StatusField')(default=u'new', max_length=100, no_check_for_status=True)),
+            ('title', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['nodes.Title'])),
+            ('slug', self.gf('django.db.models.fields.SlugField')(default='', max_length=255, blank=True)),
         ))
         db.send_create_signal(u'nodes', ['Node'])
 
 
     def backwards(self, orm):
+        # Deleting model 'Title'
+        db.delete_table(u'nodes_title')
+
         # Deleting model 'Node'
         db.delete_table(u'nodes_node')
 
@@ -70,8 +86,19 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'inherit': ('django.db.models.fields.IntegerField', [], {}),
             'modified': ('model_utils.fields.AutoLastModifiedField', [], {'default': 'datetime.datetime.now'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'default': "''", 'max_length': '255', 'blank': 'True'}),
             'status': ('model_utils.fields.StatusField', [], {'default': "u'new'", 'max_length': '100', u'no_check_for_status': 'True'}),
+            'title': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['nodes.Title']"}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'nodes'", 'to': u"orm['auth.User']"})
+        },
+        u'nodes.title': {
+            'Meta': {'object_name': 'Title'},
+            'created': ('model_utils.fields.AutoCreatedField', [], {'default': 'datetime.datetime.now'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'modified': ('model_utils.fields.AutoLastModifiedField', [], {'default': 'datetime.datetime.now'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'default': "''", 'max_length': '255', 'blank': 'True'}),
+            'title': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'titles'", 'to': u"orm['auth.User']"})
         }
     }
 
